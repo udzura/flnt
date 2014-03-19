@@ -24,12 +24,12 @@ Or install it yourself as:
 
 ### Just post log to fluent
 
-1. Setting up fluentd on your localhost:24224
-2. Call the methods below:
+* Setting up fluentd on your localhost:24224
+* Call the methods below:
 ```ruby
 Flnt.app.payment.info "Payment done"
 ```
-3. Then, your fluentd receives json `{message: "Payment done"}` with tag `app.payment.info`
+* Then, your fluentd receives json `{message: "Payment done"}` with tag `app.payment.info`
 
 `Flnt` compiles method chaining into a tag, and when the method is called with an argument,
 it emits the information to fluentd.
