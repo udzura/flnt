@@ -2,6 +2,8 @@
 
 Gentle post-to-fluentd log solution.
 
+[![Gem Version](https://badge.fury.io/rb/flnt.png)](http://badge.fury.io/rb/flnt)
+
 ## Powered by wercker
 
 [![wercker status](https://app.wercker.com/status/4c5b18d2fe3debeee48b7f0fab81eb12/m/ "wercker status")](https://app.wercker.com/project/bykey/4c5b18d2fe3debeee48b7f0fab81eb12)
