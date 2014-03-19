@@ -1,13 +1,13 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'logent/version'
+require 'flnt/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "logent"
-  spec.version       = Logent::VERSION
+  spec.name          = "flnt"
+  spec.version       = Flnt::VERSION
   spec.authors       = ["Uchio KONDO"]
-  spec.email         = ["udzura@paperboy.co.jp"]
+  spec.email         = ["udzura@udzura.jp"]
   spec.description   = %q{Gentle post-to-fluentd log solution}
   spec.summary       = %q{Gentle post-to-fluentd log solution}
   spec.homepage      = ""
