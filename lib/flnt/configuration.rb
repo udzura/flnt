@@ -20,6 +20,10 @@ module Flnt
           }
         ]
       end
+
+      def configure &b
+        b.call(self)
+      end
     end
   end
 
