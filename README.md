@@ -8,17 +8,15 @@ Gentle post-to-fluentd log solution.
 
 ## Installation
 
-Add this line to your application's Gemfile:
+Usual Gemfile way:
 
-    gem 'flnt'
+```ruby
+gem 'flnt'
+```
 
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install flnt
+```bash
+$ bundle install
+```
 
 ## Usage
 
