@@ -36,6 +36,15 @@ it emits the information to fluentd.
 
 NOTE: You cannot use methods such as `foo?` or `foo!` for tag suffix. only `/[a-zA-Z0-9_]/` are OK.
 
+### Force custome tag
+
+```ruby
+Flnt.tag!("app.event.login.info").emit! "Logged in: #{current_user.name}"
+```
+
+`Flunt.tag!` initializes logger with a tag, and `Flnt::Logger#emit!` will just send a data to fluentd
+without appending a tag suffix.
+
 ### Configuration of fluentd
 
 ```ruby

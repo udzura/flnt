@@ -31,5 +31,9 @@ module Flnt
         Fluent::Logger::FluentLogger.open(*Flnt::Configuration())
       end
     end
+
+    def tag!(tag)
+      Flnt::Logger.new(tag.to_s)
+    end
   end
 end

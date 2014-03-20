@@ -33,4 +33,9 @@ describe "Flnt" do
     logger2 = Flnt.foo_tag
     expect(logger1.__id__).not_to eq logger2.__id__
   end
+
+  it "should create a new logger with custom tag" do
+    logger = Flnt.tag!("foo.bar.buz")
+    expect(logger.instance_eval { @tag }).to eq "foo.bar.buz"
+  end
 end
