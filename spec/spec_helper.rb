@@ -16,4 +16,10 @@ RSpec.configure do |config|
   # the seed, which is printed after each run.
   #     --seed 1234
   config.order = 'random'
+
+  config.after :each do
+    Flnt.instance_eval {
+      @initialized = false
+    }
+  end
 end
