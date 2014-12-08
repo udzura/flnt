@@ -2,21 +2,14 @@ box: wercker/rvm
 build:
     steps:
         - rvm-use:
-            version: ruby-2.1.0
+            version: ruby-2.1.5
         - bundle-install
         - script:
             name: run rspec
             code: bundle exec rake spec
 
         - rvm-use:
-            version: ruby-2.0.0-p353
-        - bundle-install
-        - script:
-            name: run rspec
-            code: bundle exec rake spec
-
-        - rvm-use:
-            version: ruby-1.9.3-p545
+            version: ruby-2.0.0-p598
         - bundle-install
         - script:
             name: run rspec
