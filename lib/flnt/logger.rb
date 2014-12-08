@@ -1,4 +1,6 @@
 require 'fluent/logger'
+require 'flnt/teeable'
+require 'logger'
 
 module Flnt
   class Logger < BasicObject
@@ -17,7 +19,40 @@ module Flnt
       return self
     end
 
+    # method caching for common log level name
+    %w(debug info warn error fatal).each do |log_level|
+      define_method log_level do |*args|
+        @tag << "." << log_level.to_s
+        unless args.empty?
+          emit! args.first
+        end
+
+        return self
+      end
+    end
+
+    def __get_last_tag!
+      @tag.split('.').last
+    end
+
     def emit!(arg)
+      ::Fluent::Logger.post @tag, to_info!(arg)
+    end
+
+    def tee!(logger_or_path)
+      extend Teeable
+      case
+      when logger_or_path.respond_to?(:info)
+        self.teed_logger = logger_or_path
+      when
+        l = ::Logger.new(logger_or_path)
+        self.teed_logger = l
+      end
+      self
+    end
+
+    private
+    def to_info!(arg)
       info = {}
       case arg
       when ::Hash
@@ -31,7 +66,8 @@ module Flnt
       else
         info[:info] = arg
       end
-      ::Fluent::Logger.post @tag, info
+
+      info
     end
   end
 end
