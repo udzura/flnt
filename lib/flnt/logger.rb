@@ -1,6 +1,6 @@
 require 'fluent/logger'
-require 'flnt/teeable'
 require 'logger'
+require 'pathname'
 
 module Flnt
   class Logger < BasicObject
@@ -31,24 +31,20 @@ module Flnt
       end
     end
 
-    def __get_last_tag!
-      @tag.split('.').last
-    end
-
     def emit!(arg)
       ::Fluent::Logger.post @tag, to_info!(arg)
     end
 
     def tee!(logger_or_path)
-      extend Teeable
+      new_self = TeeableLogger.new(@tag)
       case
       when logger_or_path.respond_to?(:info)
-        self.teed_logger = logger_or_path
-      when
+        new_self.teed_logger = logger_or_path
+      when [::String, ::Pathname].include?(logger_or_path.class)
         l = ::Logger.new(logger_or_path)
-        self.teed_logger = l
+        new_self.teed_logger = l
       end
-      self
+      new_self
     end
 
     private

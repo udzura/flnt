@@ -1,5 +1,6 @@
 require "flnt/version"
 require "flnt/logger"
+require "flnt/teeable_logger"
 require "flnt/configuration"
 
 module Flnt
