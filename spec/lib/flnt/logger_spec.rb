@@ -3,6 +3,7 @@ require "spec_helper"
 describe "Flnt::Logger" do
   before do
     allow(Fluent::Logger::FluentLogger).to receive(:open).with(nil, an_instance_of(Hash))
+      .and_return(instance_double("Fluent::Logger::FluentLogger", :post => true))
   end
 
   def tag_of(flnt_logger)
