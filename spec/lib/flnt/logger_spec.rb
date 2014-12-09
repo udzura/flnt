@@ -26,6 +26,13 @@ describe "Flnt::Logger" do
     }.to raise_error NoMethodError
   end
 
+  it "should have cached some logging methods" do
+    logger = Flnt.sample
+    %i(debug info warn error fatal).each do |name|
+      expect(logger).to respond_to name
+    end
+  end
+
   it "should not cache tag called with args" do
     logger = Flnt.sample.foo
     expect(Fluent::Logger).not_to receive(:post).with("sample.foo.info.info", {message: "Hello multi times"})
