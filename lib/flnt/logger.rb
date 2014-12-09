@@ -11,9 +11,10 @@ module Flnt
     def method_missing(name, *args)
       return super if name.to_s =~ /(!|\?)$/
 
-      @tag = [@tag, name.to_s].join('.')
-      unless args.empty?
-        emit! args.first
+      if !args.empty?
+        emit! args.first, tag: [@tag, name.to_s].join('.')
+      else
+        @tag << "." << name.to_s
       end
 
       return self
@@ -22,17 +23,18 @@ module Flnt
     # method caching for common log level name
     %w(debug info warn error fatal).each do |log_level|
       define_method log_level do |*args|
-        @tag << "." << log_level.to_s
-        unless args.empty?
-          emit! args.first
+        if !args.empty?
+          emit! args.first, tag: [@tag, log_level].join('.')
+        else
+          @tag << "." << log_level
         end
 
         return self
       end
     end
 
-    def emit!(arg)
-      ::Fluent::Logger.post @tag, to_info!(arg)
+    def emit!(arg, tag: nil)
+      ::Fluent::Logger.post((tag || @tag), to_info!(arg))
     end
 
     def tee!(logger_or_path)
