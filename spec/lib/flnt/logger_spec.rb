@@ -26,6 +26,16 @@ describe "Flnt::Logger" do
     }.to raise_error NoMethodError
   end
 
+  it "should not cache tag called with args" do
+    logger = Flnt.sample.foo
+    expect(Fluent::Logger).not_to receive(:post).with("sample.foo.info.info", {message: "Hello multi times"})
+    expect(Fluent::Logger).to receive(:post).with("sample.foo.info", {message: "Hello multi times"}).thrice
+
+    3.times do
+      logger.info "Hello multi times"
+    end
+  end
+
   describe "should send messages when called with arg" do
     context "when String" do
       specify do
