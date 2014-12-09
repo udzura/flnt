@@ -31,7 +31,8 @@ describe "Flnt" do
       expect(ret.instance_eval { @tag }).to eq "init_foo"
 
       expect { ret.chain_bar }.not_to raise_error
-      expect { ret.respond_to? }.to raise_error NoMethodError
+      expect { ret.respond_to? :foo }.not_to raise_error
+      expect { ret.missing_method? }.to raise_error NoMethodError
     end
 
     it "should create a new logger for each call" do

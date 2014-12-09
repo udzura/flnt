@@ -3,7 +3,20 @@ require 'logger'
 require 'pathname'
 
 module Flnt
-  class Logger < BasicObject
+  class Logger < Object
+    # Logger should behaves like a BasicObject,
+    # but can skip xxx! or xxx? style methods...
+    ((Object.instance_methods + Object.private_instance_methods) -
+      (BasicObject.instance_methods + BasicObject.private_instance_methods)).
+      delete_if {|method_name| method_name.to_s =~ /([\-\[\]\/~=+*&|%<>!?])/}.
+      each do |target_method|
+
+      # Also pass the :singleton_class to avoid rspec stubbing errors
+      unless [:singleton_class, :object_id].include?(target_method.to_sym)
+        eval %Q(undef #{target_method})
+      end
+    end
+
     def initialize(init_tag)
       @tag = init_tag
     end
