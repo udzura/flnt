@@ -12,7 +12,8 @@ module Flnt
       each do |target_method|
 
       # Also pass the :singleton_class to avoid rspec stubbing errors
-      unless [:singleton_class, :object_id].include?(target_method.to_sym)
+      # And :class to avoid stack level too deep  in detecting receive ... FIXME
+      unless [:class, :singleton_class, :object_id].include?(target_method.to_sym)
         eval %Q(undef #{target_method})
       end
     end

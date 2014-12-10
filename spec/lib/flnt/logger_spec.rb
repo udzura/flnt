@@ -33,6 +33,12 @@ describe "Flnt::Logger" do
     end
   end
 
+  it "should be mocked by rspec successfully" do
+    logger = Flnt.sample
+    expect(logger).to receive(:info).with(instance_of(String))
+    logger.info "test"
+  end
+
   it "should not cache tag called with args" do
     logger = Flnt.sample.foo
     expect(Fluent::Logger).not_to receive(:post).with("sample.foo.info.info", {message: "Hello multi times"})
