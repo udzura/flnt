@@ -11,14 +11,14 @@ module Flnt
     # method caching for common log level name
     %w(debug info warn error fatal).each do |log_level|
       define_method log_level do |arg|
-        emit! args.first, tag: [@tag, log_level].join('.')
+        emit! arg, tag: [@tag, log_level].join('.')
       end
     end
 
     def define_suffix!(suffix)
       class << self
         define_method log_level do |arg|
-          emit! suffix, tag: [@tag, suffix].join('.')
+          emit! arg, tag: [@tag, suffix].join('.')
         end
       end
     end
