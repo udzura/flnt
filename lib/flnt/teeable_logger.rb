@@ -13,7 +13,7 @@ module Flnt
       @teed_loggers << l
     end
 
-    def send_to_all_logger(level. arg)
+    def send_to_all_logger(level, arg)
       @teed_loggers.each do |l|
         l.send(level, arg)
       end
