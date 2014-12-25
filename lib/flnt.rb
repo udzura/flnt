@@ -16,10 +16,12 @@ module Flnt
       end
     end
 
-    def tag!(tag)
+    def tag(tag)
       initialize!
       Flnt::Logger.new(tag.to_s)
     end
+    # make backward compatible
+    alias tag! tag
 
     # This is useful for testing
     def test_mode!

@@ -11,36 +11,24 @@ describe "Flnt::Logger" do
   end
 
   it "should chain the method call appending a tag" do
-    expect(tag_of Flnt.sample.foo).to eq "sample.foo"
-    expect(tag_of Flnt._sample._foo2).to eq "_sample._foo2"
-    expect(tag_of Flnt.sample.foo.bar).to eq "sample.foo.bar"
-  end
-
-  it "should raise when chained with ! or ? methods" do
-    expect {
-      Flnt.sample.warn!
-    }.to raise_error NoMethodError
-
-    expect {
-      Flnt.sample.info?
-    }.to raise_error NoMethodError
+    expect(tag_of Flnt.tag!("sample.foo")).to eq "sample.foo"
   end
 
   it "should have cached some logging methods" do
-    logger = Flnt.sample
+    logger = Flnt.tag("sample")
     %i(debug info warn error fatal).each do |name|
       expect(logger).to respond_to name
     end
   end
 
   it "should be mocked by rspec successfully" do
-    logger = Flnt.sample
+    logger = Flnt.tag("sample")
     expect(logger).to receive(:info).with(instance_of(String))
     logger.info "test"
   end
 
   it "should not cache tag called with args" do
-    logger = Flnt.sample.foo
+    logger = Flnt.tag("sample.foo")
     expect(Fluent::Logger).not_to receive(:post).with("sample.foo.info.info", {message: "Hello multi times"})
     expect(Fluent::Logger).to receive(:post).with("sample.foo.info", {message: "Hello multi times"}).thrice
 
@@ -53,14 +41,14 @@ describe "Flnt::Logger" do
     context "when String" do
       specify do
         expect(Fluent::Logger).to receive(:post).with("sample.info", {message: "Hello Info"})
-        Flnt.sample.info "Hello Info"
+        Flnt.tag("sample").info "Hello Info"
       end
     end
 
     context "when Hash" do
       specify do
         expect(Fluent::Logger).to receive(:post).with("sample.info", {info1: "Info", info2: 1234})
-        Flnt.sample.info({info1: "Info", info2: 1234})
+        Flnt.tag("sample").info({info1: "Info", info2: 1234})
       end
     end
 
@@ -70,7 +58,7 @@ describe "Flnt::Logger" do
       specify do
         expect(Fluent::Logger).to receive(:post)
           .with("sample.info", {error_class: StandardError, message: "Error Info"})
-        Flnt.sample.info(error)
+        Flnt.tag("sample").info(error)
       end
     end
 
@@ -79,7 +67,7 @@ describe "Flnt::Logger" do
 
       specify do
         expect(Fluent::Logger).to receive(:post).with("sample.info", {info: obj})
-        Flnt.sample.info(obj)
+        Flnt.tag("sample").info(obj)
       end
     end
   end
