@@ -3,12 +3,26 @@ require 'flnt/logger'
 
 module Flnt
   class TeeableLogger < Flnt::Logger
-    attr_accessor :teed_logger
+    def initialize(t)
+      super
+      @teed_loggers = []
+    end
+    attr_accessor :teed_loggers
+
+    def add_teed_logger(l)
+      @teed_loggers << l
+    end
+
+    def send_to_all_logger(level. arg)
+      @teed_loggers.each do |l|
+        l.send(level, arg)
+      end
+    end
 
     def emit!(arg, tag: nil)
       level = __get_last_tag!(tag || @tag)
       level = 'info' unless %w(debug info warn error fatal).include?(level)
-      teed_logger.send(level, arg)
+      send_to_all_logger(level, arg)
       super
     end
 

@@ -4,46 +4,22 @@ require 'pathname'
 
 module Flnt
   class Logger < Object
-    # Logger should behaves like a BasicObject,
-    # but can skip xxx! or xxx? style methods...
-    ((Object.instance_methods + Object.private_instance_methods) -
-      (BasicObject.instance_methods + BasicObject.private_instance_methods)).
-      delete_if {|method_name| method_name.to_s =~ /([\-\[\]\/~=+*&|%<>!?])/}.
-      each do |target_method|
-
-      # Also pass the :singleton_class to avoid rspec stubbing errors
-      # And :class to avoid stack level too deep  in detecting receive ... FIXME
-      unless [:class, :singleton_class, :object_id].include?(target_method.to_sym)
-        eval %Q(undef #{target_method})
-      end
-    end
-
     def initialize(init_tag)
       @tag = init_tag
     end
 
-    def method_missing(name, *args)
-      return super if name.to_s =~ /(!|\?)$/
-
-      if !args.empty?
-        emit! args.first, tag: [@tag, name.to_s].join('.')
-      else
-        @tag << "." << name.to_s
-      end
-
-      return self
-    end
-
     # method caching for common log level name
     %w(debug info warn error fatal).each do |log_level|
-      define_method log_level do |*args|
-        if !args.empty?
-          emit! args.first, tag: [@tag, log_level].join('.')
-        else
-          @tag << "." << log_level
-        end
+      define_method log_level do |arg|
+        emit! args.first, tag: [@tag, log_level].join('.')
+      end
+    end
 
-        return self
+    def define_suffix!(suffix)
+      class << self
+        define_method log_level do |arg|
+          emit! suffix, tag: [@tag, suffix].join('.')
+        end
       end
     end
 
@@ -55,10 +31,10 @@ module Flnt
       new_self = TeeableLogger.new(@tag)
       case
       when logger_or_path.respond_to?(:info)
-        new_self.teed_logger = logger_or_path
+        new_self.add_teed_logger logger_or_path
       when [::String, ::Pathname].include?(logger_or_path.class)
         l = ::Logger.new(logger_or_path)
-        new_self.teed_logger = l
+        new_self.add_teed_logger l
       end
       new_self
     end
