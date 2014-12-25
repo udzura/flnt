@@ -7,12 +7,12 @@ describe 'Flnt::TeeableLogger' do
   end
 
   describe '#tee!' do
-    let(:flnt) { Flnt.cool_log }
+    let(:flnt) { Flnt.tag!('cool_log') }
     let(:logger) { Logger.new('/dev/null') }
     let(:new_logger) { flnt.tee!(logger) }
 
     it 'should set the teed logger' do
-      expect(new_logger.teed_logger).to be(logger)
+      expect(new_logger.teed_loggers.first).to be(logger)
     end
 
     it 'should tee the log to another logger' do
@@ -27,8 +27,8 @@ describe 'Flnt::TeeableLogger' do
       let(:new_logger) { flnt.tee!(path) }
 
       it 'should create a logger pointing to the path' do
-        expect(new_logger.teed_logger).to be_an_instance_of(Logger)
-        logdev = new_logger.teed_logger.instance_eval { @logdev }
+        expect(new_logger.teed_loggers.first).to be_an_instance_of(Logger)
+        logdev = new_logger.teed_loggers.first.instance_eval { @logdev }
         expect(logdev.dev.path).to eq path
       end
     end
@@ -42,8 +42,8 @@ describe 'Flnt::TeeableLogger' do
       let(:new_logger) { flnt.tee!(path) }
 
       it 'should create a logger pointing to the path' do
-        expect(new_logger.teed_logger).to be_an_instance_of(Logger)
-        logdev = new_logger.teed_logger.instance_eval { @logdev }
+        expect(new_logger.teed_loggers.first).to be_an_instance_of(Logger)
+        logdev = new_logger.teed_loggers.first.instance_eval { @logdev }
         expect(logdev.dev.path).to eq path.to_s
       end
     end
