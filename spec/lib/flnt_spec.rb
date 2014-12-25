@@ -9,7 +9,7 @@ describe "Flnt" do
     allow(Flnt).to receive(:initialized?).and_return(false)
 
     expect(Fluent::Logger::FluentLogger).to receive(:open).with(*Flnt::Configuration())
-    Flnt.init_foo
+    Flnt.tag("init_foo")
   end
 
   describe 'on connection ok' do
@@ -23,21 +23,17 @@ describe "Flnt" do
 
       expect(Fluent::Logger::FluentLogger).not_to receive(:open)
       expect(Flnt).not_to receive(:Configuration)
-      Flnt.init_foo
+      Flnt.tag("init_foo")
     end
 
     it "should return Flnt::Logger tagged with called method name" do
-      ret = Flnt.init_foo
+      ret = Flnt.tag("init_foo")
       expect(ret.instance_eval { @tag }).to eq "init_foo"
-
-      expect { ret.chain_bar }.not_to raise_error
-      expect { ret.respond_to? :foo }.not_to raise_error
-      expect { ret.missing_method? }.to raise_error NoMethodError
     end
 
     it "should create a new logger for each call" do
-      logger1 = Flnt.foo_tag
-      logger2 = Flnt.foo_tag
+      logger1 = Flnt.tag("foo_tag")
+      logger2 = Flnt.tag("foo_tag")
       expect(logger1.__id__).not_to eq logger2.__id__
     end
 
