@@ -49,6 +49,18 @@ describe "Flnt::Logger" do
     end
   end
 
+  describe "should send messages with dynamic method call" do
+    specify do
+      expect(Fluent::Logger).to receive(:post).with("sample.info", {message: "Hello Info"})
+      Flnt.sample.send :info, "Hello Info"
+    end
+
+    specify do
+      expect(Fluent::Logger).to receive(:post).with("sample.warn", {message: "Hello Info"})
+      Flnt.sample.send :warn, "Hello Info"
+    end
+  end
+
   describe "should send messages when called with arg" do
     context "when String" do
       specify do
