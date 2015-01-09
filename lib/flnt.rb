@@ -13,7 +13,7 @@ module Flnt
       each do |target_method|
 
       # Also pass the :singleton_class to avoid rspec stubbing errors
-      unless [:singleton_class, :object_id].include?(target_method.to_sym)
+      unless [:singleton_class, :object_id, :send, :__send__].include?(target_method.to_sym)
         eval %Q(undef #{target_method})
       end
     end
