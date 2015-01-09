@@ -20,7 +20,6 @@ module Flnt
 
     def method_missing(name, *args)
       return super if name.to_s =~ /(!|\?)$/
-      initialize!
       Flnt::Logger.new(name.to_s)
     end
 
@@ -36,7 +35,6 @@ module Flnt
     end
 
     def tag!(tag)
-      initialize!
       Flnt::Logger.new(tag.to_s)
     end
 

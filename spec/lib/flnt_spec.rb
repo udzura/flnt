@@ -9,7 +9,7 @@ describe "Flnt" do
     allow(Flnt).to receive(:initialized?).and_return(false)
 
     expect(Fluent::Logger::FluentLogger).to receive(:open).with(*Flnt::Configuration())
-    Flnt.init_foo
+    Flnt.initialize!
   end
 
   describe 'on connection ok' do
