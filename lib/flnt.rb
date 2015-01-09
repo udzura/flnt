@@ -28,8 +28,8 @@ module Flnt
       !! @initialized
     end
 
-    def initialize!
-      if !initialized? and !test_mode?
+    def initialize!(force=false)
+      if force or ( !initialized? and !test_mode? )
         @initialized = true
         Fluent::Logger::FluentLogger.open(*Flnt::Configuration())
       end

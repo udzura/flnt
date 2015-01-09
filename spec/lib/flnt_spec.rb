@@ -26,6 +26,14 @@ describe "Flnt" do
       Flnt.init_foo
     end
 
+    it "should be able to force to initialize fluentd connection" do
+      allow(Flnt).to receive(:initialized?).and_return(true)
+
+      expect(Fluent::Logger::FluentLogger).to receive(:open)
+      expect(Flnt).to receive(:Configuration)
+      Flnt.initialize!(true)
+    end
+
     it "should return Flnt::Logger tagged with called method name" do
       ret = Flnt.init_foo
       expect(ret.instance_eval { @tag }).to eq "init_foo"
