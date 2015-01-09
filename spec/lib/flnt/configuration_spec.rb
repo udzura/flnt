@@ -31,6 +31,16 @@ describe "Flnt::Configuration" do
     )
   end
 
+  it "should be force to hook Flint.initialize!(true)" do
+    allow(Flnt).to receive(:initialized?).and_return(true)
+    expect(Fluent::Logger::FluentLogger).to receive(:open)
+    expect(Flnt).to receive(:Configuration)
+
+    Flnt::Configuration.configure do |c|
+      c.host = 'fluentd.example.jp'
+    end
+  end
+
   after do
     Flnt::Configuration.instance_eval do
       @host = nil

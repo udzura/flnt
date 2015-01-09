@@ -1,3 +1,5 @@
+require 'flnt'
+
 module Flnt
   module Configuration
     class << self
@@ -23,6 +25,7 @@ module Flnt
 
       def configure &b
         b.call(self)
+        ::Flnt.initialize!(true)
       end
     end
   end
